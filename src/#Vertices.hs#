@@ -1,0 +1,9 @@
+module Vertices where
+
+import Graphics.UI.GLUT
+import System.Random
+import qualified Graphics.Formats.STL as STL
+
+
+
+

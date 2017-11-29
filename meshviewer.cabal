@@ -1,0 +1,43 @@
+name:                meshviewer
+version:             0.1.0.0
+synopsis:            Simple viewer of STL and OBJ meshes written in modern OpenGL
+description:         Simple viewer of STL and OBJ meshes written in modern OpenGL
+homepage:            https://github.com/nbrk/meshviewer
+license:             BSD3
+license-file:        LICENSE
+author:              Nikolay Burkov
+maintainer:          nbrk@linklevel.net
+copyright:           2017 Nikolay Burkov
+category:            Graphics
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+
+executable             meshviewer
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , bytestring
+                     , vector
+--                     , bitmap
+--                     , stb-image
+                     , STL
+                     , wavefront
+                     , text
+                     , cereal
+                     , random
+                     , GLUT
+  default-language:    Haskell2010
+  other-modules:       GLUT
+                     , LoadShaders
+                     , LoadMesh
+                     , OpenGL
+                     , Types
+                     , Utils
+
+
+source-repository head
+  type:     git
+  location: https://github.com/nbrk/meshviewer
