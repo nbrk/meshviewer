@@ -21,6 +21,8 @@ executable             meshviewer
   build-depends:       base
                      , bytestring
                      , vector
+                     , linear
+                     , time
 --                     , bitmap
 --                     , stb-image
                      , STL
@@ -28,9 +30,12 @@ executable             meshviewer
                      , text
                      , cereal
                      , random
+                     , OpenGLRaw
                      , GLUT
+--                     , X11
   default-language:    Haskell2010
   other-modules:       GLUT
+                     , GLUTCallbacks
                      , LoadShaders
                      , LoadMesh
                      , OpenGL

@@ -2,6 +2,8 @@ module Types where
 
 import Graphics.UI.GLUT
 import Data.IORef
+import Linear
+import Data.Time.Clock
 
 
 data MeshFileType = MeshFileSTL | MeshFileOBJ
@@ -19,10 +21,20 @@ data Mesh = Mesh
 
 
 data Descriptor = Descriptor
-  { descAngles :: IORef (Vector3 Float)
-  , descColor :: IORef (Vector3 Float)
-  , descScale :: IORef Float
-  , descProgram ::Program
+  { descProgram ::Program
   , descVAO :: VertexArrayObject
   , descNVertices :: NumArrayIndices
+
+  , descWindowSize :: IORef Size
+  , descWindowPos :: IORef Position
+  , descTimestamp :: IORef UTCTime
+
+  , descCameraPos :: IORef (V3 Float)
+  , descCameraDir :: IORef (V3 Float)
+  , descVertAngle :: IORef Float
+  , descHorizAngle :: IORef Float
+  , descFOV :: IORef Float
+  , descCameraRight :: IORef (V3 Float)
+  , descA :: IORef Float
+  , descB :: IORef Float
   }

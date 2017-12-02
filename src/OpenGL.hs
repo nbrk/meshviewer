@@ -1,11 +1,17 @@
 module OpenGL where
 
 import Foreign.Marshal.Array(withArray)
-import Graphics.UI.GLUT
+import Foreign.Marshal(with)
+import Foreign.Ptr
+import Foreign.Storable
+import Graphics.UI.GLUT hiding (perspective, lookAt)
+import qualified Graphics.GL as GLRaw
 import Data.IORef
 import Control.Monad
-import Foreign.Storable
-import qualified Graphics.Formats.STL as STL
+import Data.Time.Clock
+
+import Linear
+
 
 import Types
 import Utils
@@ -14,14 +20,24 @@ import LoadShaders
 
 setupGL :: Mesh -> IO Descriptor
 setupGL m = do
-  let poses = meshPositions m
-
-  colors <- forM poses $ \_ -> randomColor
+  -- get initial viewport pos and size
+  (pos, size) <- get viewport
 
   -- init iorefs
-  avref <- newIORef $ Vector3 0 0 (0 :: Float)
-  colref <- newIORef $ Vector3 0 0 (1 :: Float)
-  scaleref <- newIORef (1 :: Float)
+  wposref <- newIORef pos
+  wsizeref <- newIORef size
+  vangref <- newIORef (0 :: Float)
+  hangref <- newIORef (pi :: Float)
+  fovref <- newIORef (45 :: Float)
+  cposref <- newIORef (V3 0 0 5)
+  rightref <- newIORef (rightVector pi) -- XXX
+  cdirref <- newIORef (sphericalToCartesian pi 0) -- XXX
+  t <- getCurrentTime
+  tstampref <- newIORef t
+
+  -- XXX
+  a <- newIORef (0.1 :: Float)
+  b <- newIORef (100 :: Float)
 
   -- compile and link shader program
   program <- loadShaders [
@@ -33,19 +49,30 @@ setupGL m = do
   vao <- genObjectName
   bindVertexArrayObject $= Just vao
 
+  -- setup the VertexArray buffer
+  let poses = meshPositions m
   setupArrayBuffer program poses 3 "vPosition"
-  setupArrayBuffer program colors 3 "vColor"
-
---  position (Light 1) $= Vertex4 1.0 2.0 2.0 1.0
+--  mapM_ (putStrLn . show) poses
 
   return
     Descriptor
-    { descAngles = avref
-    , descColor = colref
-    , descScale = scaleref
-    , descProgram = program
+    { descProgram = program
     , descVAO = vao
     , descNVertices = fromIntegral (length poses)
+
+    , descWindowSize = wsizeref
+    , descWindowPos = wposref
+    , descTimestamp = tstampref
+
+    , descCameraPos = cposref
+    , descCameraDir = cdirref
+    , descVertAngle = vangref
+    , descHorizAngle = hangref
+    , descFOV = fovref
+    , descCameraRight = rightref
+
+    , descA = a
+    , descB = b
     }
 
 
@@ -71,16 +98,55 @@ setupArrayBuffer program dat dim atname =
     vertexAttribArray atloc $= Enabled
 
 
+-- update uniforms in the shader program
 updateUniforms :: Descriptor -> IO ()
-updateUniforms d = do
-  -- get settings from IORef
-  (Vector3 ax ay az) <- get $ descAngles d
-  scale <- get $ descScale d
+updateUniforms d =
+  putStrLn "updateUniforms" >>
+  updateUniformMVP d
 
-  -- locate uniforms
-  rotAngles <- get $ uniformLocation (descProgram d) "rotAngles"
-  scaleFactor <- get $ uniformLocation (descProgram d) "scaleFactor"
 
-  -- write uniforms
-  uniform rotAngles $= Vector3 ax ay az
-  uniform scaleFactor $= scale
+-- just raw update the uniform
+uniformMatrix4fv :: Storable a => Program -> String -> a -> IO ()
+uniformMatrix4fv p n m = do
+  loc <- get $ uniformLocation p n
+  let loc' = (read . head . tail . words . show) loc
+  with m $ \ptr -> do
+    GLRaw.glUniformMatrix4fv loc' 1 0 (castPtr ptr)
+
+
+-- get the current iorefs and calc the MVP; update it
+updateUniformMVP :: Descriptor -> IO ()
+updateUniformMVP d = do
+  fov <- get $ descFOV d
+  cpos <- get $ descCameraPos d
+  horang <- get $ descHorizAngle d
+  vertang <- get $ descVertAngle d
+  right <- get $ descCameraRight d
+  cdir <- get $ descCameraDir d
+
+  -- XXX
+  a <- get $ descA d
+  b <- get $ descB d
+
+   -- camera up
+  let up = cross right cdir
+
+  let modelMatrix = identity :: M44 Float
+  let viewMatrix =
+        lookAt
+        cpos -- eye
+        (cpos ^+^ cdir) -- center
+        up
+  let projectionMatrix =
+        perspective
+        (fov * (pi / 180)) -- fov (y-dir in rad)
+        (1600/900) -- aspect ratio
+        a -- near plane
+        b -- far plane
+  let mvp = projectionMatrix !*! viewMatrix !*! modelMatrix
+--  let mvp = identity * viewMatrix * modelMatrix
+
+  -- update the new mvp
+  putStrLn $ "fov: " ++ show fov
+  uniformMatrix4fv (descProgram d) "MVP" mvp
+
