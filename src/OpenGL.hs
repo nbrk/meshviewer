@@ -129,7 +129,7 @@ updateUniformMVP d = do
   b <- get $ descB d
 
    -- camera up
-  let up = cross right cdir
+  let up = cross cdir right
 
   let modelMatrix = identity :: M44 Float
   let viewMatrix =
@@ -140,7 +140,8 @@ updateUniformMVP d = do
   let projectionMatrix =
         perspective
         (fov * (pi / 180)) -- fov (y-dir in rad)
-        (1600/900) -- aspect ratio
+--        45
+        (4/3) -- aspect ratio
         a -- near plane
         b -- far plane
   let mvp = projectionMatrix !*! viewMatrix !*! modelMatrix
@@ -148,5 +149,5 @@ updateUniformMVP d = do
 
   -- update the new mvp
   putStrLn $ "fov: " ++ show fov
-  uniformMatrix4fv (descProgram d) "MVP" mvp
+  uniformMatrix4fv (descProgram d) "MVP" (transpose mvp)
 

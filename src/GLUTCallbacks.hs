@@ -58,14 +58,14 @@ mouseWheel d _ wdir _ = do
 
 
 -- -- special key down
--- specKeyDown :: Descriptor -> SpecialCallback
--- specKeyDown d KeyPageDown _ = p $ do
---   right <- get $ descCameraRight d
---   (descCameraPos d) $~ \v -> v ^-^ right ^* (deltaTime * speed)
--- specKeyDown d KeyPageUp _ = p $ do
---   right <- get $ descCameraRight d
---   (descCameraPos d) $~ \v -> v ^-^ right ^* (deltaTime * speed)
--- specKeyDown _ _ _ = return ()
+specKeyDown :: Descriptor -> SpecialCallback
+specKeyDown d KeyPageDown _ = p $ do
+  right <- get $ descCameraRight d
+  (descCameraPos d) $~ \v -> v ^-^ right ^* (deltaTime * speed)
+specKeyDown d KeyPageUp _ = p $ do
+  right <- get $ descCameraRight d
+  (descCameraPos d) $~ \v -> v ^+^ right ^* (deltaTime * speed)
+specKeyDown _ _ _ = return ()
 
 
 -- window reposition
@@ -93,7 +93,7 @@ resetViewport d = do
 
 passiveMotion :: Descriptor -> MotionCallback
 passiveMotion d (Position posx posy) = do
-  let mouseSpeed = 0.001
+  let mouseSpeed = 0.0001
 
   -- get old and current time and reset the ioref
   tlast <- get $ descTimestamp d
@@ -102,7 +102,7 @@ passiveMotion d (Position posx posy) = do
 
   -- float time diff
 --  let deltaTime = realToFrac $ diffUTCTime tnow tlast
-  let deltaTime = 0.5
+  let deltaTime = 0.05
 
   -- current window dimensions and pos set by the user
   (Size w h) <- get $ descWindowSize d
