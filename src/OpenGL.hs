@@ -37,7 +37,7 @@ setupGL m = do
 
   -- XXX
   a <- newIORef (0.1 :: Float)
-  b <- newIORef (100 :: Float)
+  b <- newIORef (100000 :: Float)
 
   -- compile and link shader program
   program <- loadShaders [
@@ -139,8 +139,8 @@ updateUniformMVP d = do
         up
   let projectionMatrix =
         perspective
-        (fov * (pi / 180)) -- fov (y-dir in rad)
---        45
+--        (fov * (pi / 180)) -- fov (y-dir in rad)
+        45
         (4/3) -- aspect ratio
         a -- near plane
         b -- far plane

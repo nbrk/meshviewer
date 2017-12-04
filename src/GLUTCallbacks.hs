@@ -59,12 +59,27 @@ mouseWheel d _ wdir _ = do
 
 -- -- special key down
 specKeyDown :: Descriptor -> SpecialCallback
-specKeyDown d KeyPageDown _ = p $ do
-  right <- get $ descCameraRight d
-  (descCameraPos d) $~ \v -> v ^-^ right ^* (deltaTime * speed)
-specKeyDown d KeyPageUp _ = p $ do
-  right <- get $ descCameraRight d
-  (descCameraPos d) $~ \v -> v ^+^ right ^* (deltaTime * speed)
+specKeyDown d KeyLeft _ = p $ do
+--  right <- get $ descCameraRight d
+  (descHorizAngle d) $~ \q -> (q + 15)
+  horang <- get $ descHorizAngle d
+  vertang <- get$ descVertAngle d
+  let right = rightVector horang
+  let cdir = sphericalToCartesian horang vertang
+  descCameraRight d $= right
+  descCameraDir d $= cdir
+  p $ return ()
+
+--specKeyDown d KeyRight _ = p $ do
+--  right <- get $ descCameraRight d
+--  (descCameraPos d) $~ \v -> v ^+^ right ^* (deltaTime * speed)
+
+-- specKeyDown d KeyPageDown _ = p $ do
+--   right <- get $ descCameraRight d
+--   (descCameraPos d) $~ \v -> v ^-^ right ^* (deltaTime * speed)
+-- specKeyDown d KeyPageUp _ = p $ do
+--   right <- get $ descCameraRight d
+--   (descCameraPos d) $~ \v -> v ^+^ right ^* (deltaTime * speed)
 specKeyDown _ _ _ = return ()
 
 
@@ -101,8 +116,8 @@ passiveMotion d (Position posx posy) = do
   descTimestamp d $= tnow
 
   -- float time diff
---  let deltaTime = realToFrac $ diffUTCTime tnow tlast
-  let deltaTime = 0.05
+  let deltaTime = realToFrac $ diffUTCTime tnow tlast
+--  let deltaTime = 0.05
 
   -- current window dimensions and pos set by the user
   (Size w h) <- get $ descWindowSize d
