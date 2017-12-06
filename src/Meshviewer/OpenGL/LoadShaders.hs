@@ -13,14 +13,14 @@
 --
 --------------------------------------------------------------------------------
 
-module LoadShaders (
+module Meshviewer.OpenGL.LoadShaders (
    ShaderSource(..), ShaderInfo(..), loadShaders
 ) where
 
-import Control.Exception
-import Control.Monad
-import qualified Data.ByteString as B
-import Graphics.UI.GLUT
+import           Control.Exception
+import           Control.Monad
+import qualified Data.ByteString           as B
+import           Graphics.Rendering.OpenGL
 
 --------------------------------------------------------------------------------
 
@@ -37,8 +37,8 @@ data ShaderSource =
 
 getSource :: ShaderSource -> IO B.ByteString
 getSource (ByteStringSource bs) = return bs
-getSource (StringSource str) = return $ packUtf8 str
-getSource (FileSource path) = B.readFile path
+getSource (StringSource str)    = return $ packUtf8 str
+getSource (FileSource path)     = B.readFile path
 
 --------------------------------------------------------------------------------
 

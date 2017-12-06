@@ -1,0 +1,155 @@
+
+./Setup.hs,15
+main main1,2
+
+./src/Meshviewer/Camera.hs,114
+module Meshviewer.Camera Meshviewer.Camera0,1
+defaultCamera defaultCamera7,8
+defaultCamera defaultCamera8,9
+
+./src/Meshviewer/Projection.hs,138
+module Meshviewer.Projection Meshviewer.Projection0,1
+defaultProjection defaultProjection5,6
+defaultProjection defaultProjection6,7
+
+./src/Meshviewer/Types.hs,1680
+module Meshviewer.Types Meshviewer.Types1,2
+data MeshPrimitive MeshPrimitive9,10
+data MeshPrimitive = MeshTrianglesMeshTriangles9,10
+                   | MeshPointsMeshPoints10,11
+                   | MeshLinesMeshLines11,12
+data Mesh Mesh14,15
+data Mesh = MeshMesh14,15
+  { _meshVertices _meshVertices15,16
+  , _meshPrimitive _meshPrimitive17,18
+type Radian Radian22,23
+data Model Model25,26
+data Model = ModelModel25,26
+  { _modelMesh _modelMesh26,27
+  , _modelPos _modelPos28,29
+  , _modelWireframe _modelWireframe29,30
+  , _modelColor _modelColor30,31
+  , _modelScale _modelScale31,32
+  , _modelRotation _modelRotation32,33
+data Camera Camera36,37
+data Camera = CameraCamera36,37
+  { _cameraPos _cameraPos37,38
+  , _cameraDir _cameraDir38,39
+  , _cameraUp _cameraUp39,40
+data Projection Projection43,44
+data Projection = ProjectionProjection43,44
+  { _projOrtho _projOrtho44,45
+data ViewerSettings ViewerSettings50,51
+data ViewerSettings = ViewerSettingsViewerSettings50,51
+  { _fullscreen _fullscreen51,52
+  , _backgroundColor _backgroundColor52,53
+  , _useMouse _useMouse54,55
+  , _speed _speed56,57
+  , _size _size58,59
+data Viewer Viewer63,64
+data Viewer g = ViewerViewer63,64
+  { _viewerModels _viewerModels64,65
+  , _viewerCamera _viewerCamera65,66
+  , _viewerProjection _viewerProjection66,67
+  , _viewerSettings _viewerSettings67,68
+  , _viewerGraphicsContext _viewerGraphicsContext68,69
+class GraphicsContext GraphicsContext73,74
+class GraphicsContext GraphicsContext73,74
+  createViewer createViewer74,75
+  loop loop75,76
+  bufferModel bufferModel76,77
+  render render77,78
+
+./src/Meshviewer/Viewer.hs,219
+module Meshviewer.Viewer Meshviewer.Viewer0,1
+defaultViewerWith defaultViewerWith11,12
+defaultViewerWith defaultViewerWith12,13
+defaultViewer defaultViewer22,23
+addModel addModel26,27
+addModel addModel27,28
+
+./src/Meshviewer/ViewerSettings.hs,162
+module Meshviewer.ViewerSettings Meshviewer.ViewerSettings0,1
+defaultViewerSettings defaultViewerSettings7,8
+defaultViewerSettings defaultViewerSettings8,9
+
+./src/Meshviewer/GLFW.hs,591
+module Meshviewer.GLFW Meshviewer.GLFW1,2
+data GLFWContext GLFWContext15,16
+data GLFWContext = GLFWContextGLFWContext15,16
+  { _glfwWindow _glfwWindow16,17
+  , _glfwOpenGLCtx _glfwOpenGLCtx17,18
+instance instance24,25
+glfwCreateViewer glfwCreateViewer31,32
+glfwCreateViewer glfwCreateViewer32,33
+glfwLoopViewer glfwLoopViewer60,61
+glfwLoopViewer glfwLoopViewer61,62
+glfwBufferModel glfwBufferModel73,74
+glfwBufferModel glfwBufferModel74,75
+glfwRenderViewer glfwRenderViewer82,83
+glfwRenderViewer glfwRenderViewer83,84
+--glfwRenderViewer --glfwRenderViewer84,85
+
+./src/Meshviewer/OpenGL.hs,688
+module Meshviewer.OpenGL Meshviewer.OpenGL2,3
+data OpenGLContext OpenGLContext19,20
+data OpenGLContext = OpenGLContextOpenGLContext19,20
+  { -- | VAO VAO20,21
+    _glctxVAOList _glctxVAOList21,22
+  , _glctxProgram _glctxProgram23,24
+glctxInit glctxInit31,32
+glctxInit glctxInit32,33
+glctxAddModel glctxAddModel46,47
+glctxAddModel glctxAddModel47,48
+glctxRenderViewer glctxRenderViewer60,61
+glctxRenderViewer glctxRenderViewer61,62
+glctxRenderModel glctxRenderModel76,77
+glctxRenderModel glctxRenderModel77,78
+bufferOffset bufferOffset94,95
+bufferOffset bufferOffset95,96
+setupArrayBuffer setupArrayBuffer99,100
+setupArrayBuffer setupArrayBuffer100,101
+
+./src/Meshviewer/OpenGL/FragmentShader.hs,147
+module Meshviewer.OpenGL.FragmentShader Meshviewer.OpenGL.FragmentShader1,2
+fragmentShaderSourceString fragmentShaderSourceString6,7
+{{13,14
+
+./src/Meshviewer/OpenGL/LoadShaders.hs,703
+module Meshviewer.OpenGL.LoadShaders Meshviewer.OpenGL.LoadShaders15,16
+data ShaderSource ShaderSource28,29
+     ByteStringSource ByteStringSource29,30
+   | StringSource StringSource31,32
+   | FileSource FileSource33,34
+getSource getSource37,38
+getSource getSource38,39
+data ShaderInfo ShaderInfo46,47
+data ShaderInfo = ShaderInfo ShaderInfo46,47
+loadShaders loadShaders54,55
+loadShaders loadShaders55,56
+linkAndCheck linkAndCheck61,62
+linkAndCheck linkAndCheck62,63
+loadCompileAttach loadCompileAttach64,65
+loadCompileAttach loadCompileAttach65,66
+compileAndCheck compileAndCheck74,75
+compileAndCheck compileAndCheck75,76
+checked checked77,78
+checked checked83,84
+
+./src/Meshviewer/OpenGL/Utils.hs,106
+module Meshviewer.OpenGL.Utils Meshviewer.OpenGL.Utils0,1
+color4Of color4Of7,8
+color4Of color4Of8,9
+
+./src/Meshviewer/OpenGL/VertexShader.hs,152
+module Meshviewer.OpenGL.VertexShader Meshviewer.OpenGL.VertexShader1,2
+vertexShaderSourceString vertexShaderSourceString5,6
+{{15,16
+// //17,18
+
+./app/Main.hs,96
+module Main Main0,1
+mesh1 mesh110,11
+model1 model120,21
+main main25,26
+main main26,27
